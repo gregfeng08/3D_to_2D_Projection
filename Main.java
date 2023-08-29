@@ -1,31 +1,48 @@
+/* AUTHOR: Gregory Feng
+ * DATE: 8/27/23
+ * DESCRIPTION: Creates a 3-dimensional cube visualization using matrix operations
+ */
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
 
 import javax.swing.*;
 public class Main extends JFrame {
 	
 	public static double resx = 1920, resy = 1080, rotationDelay = 1;
-	public static Point[] points = new Point[8];
+	//public static Point[] points = new Point[8];
+	public static ArrayList<Point> points = new ArrayList<Point>();
 	
 	public Main() {
+		//I don't even know what the shape is for this
+		for(double i=-100;i<100;i+=0.5) {
+			for(double j=-100;j<100;j+=0.5) {
+				for(double k=-100;k<100;k+=0.5) {
+					if((i*i+j*j+k*k)==100*100) {
+						points.add(new Point(i, j, k));
+					}
+				}
+			}
+		}
+		
 		
 		//Points to make a cube
-		points[0] = new Point(100,100,100);
+		/*points[0] = new Point(100,100,100);
   		points[1] = new Point(100,-100,100);
   		points[2] = new Point(-100,100,100);
   		points[3] = new Point(-100,-100,100);
   		points[4] = new Point(100,100,-100);
   		points[5] = new Point(100,-100,-100);
   		points[6] = new Point(-100,100,-100);
-  		points[7] = new Point(-100,-100,-100);
+  		points[7] = new Point(-100,-100,-100);*/
   		
+  		//Projection Setup
 		setTitle("3D Projection");
 		setSize((int)resx,(int)resy);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		final PaintPanel paintPan = new PaintPanel();
 		final JPanel panel = new JPanel();
-		add(panel, BorderLayout.EAST);
+		add(panel, BorderLayout.LINE_END);
 		add(paintPan, BorderLayout.CENTER);
 		setVisible(true);
 		
@@ -39,16 +56,10 @@ public class Main extends JFrame {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			angle+=0.005;
+			angle+=0.003;
 			paintPan.updateGraphics(angle);
 		}
 	}
-	private Object updateGraphics(double angle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	// Multiplies a mxn by nxr matrix provided mxr
-	
 	public static void main(String[] args) {
 		new Main();
 	}
@@ -56,7 +67,6 @@ public class Main extends JFrame {
 }
 
 class PaintPanel extends JPanel {
-	//private Color color = Color.GREEN;
 	
 	public PaintPanel() {
 		setBackground(Color.BLACK);
@@ -68,7 +78,7 @@ class PaintPanel extends JPanel {
 		Graphics2D drawImage = (Graphics2D) g;
 		for(Point p:Main.points) {
 			drawImage.setColor(Color.GREEN);
-			drawImage.fillOval((int)p.twoDx/2+1920/3,(int)p.twoDy/2+1080/3,10,10);
+			drawImage.fillOval((int) ((p.twoDx/2+1920/3)),(int) ((p.twoDy/2+1080/3)),10,10);
 		}
 	}
 	public void updateGraphics(double angle) {

@@ -1,8 +1,8 @@
 
 public class Point {
-	public int x;
-	public int y;
-	public int z;
+	public double x;
+	public double y;
+	public double z;
 	
 	public double twoDx;
 	public double twoDy;
@@ -12,18 +12,10 @@ public class Point {
 			{0,1,0}
 		};
 	
-	public Point(int x_, int y_, int z_) {
+	public Point(double x_, double y_, double z_) {
 		x=x_;
 		y=y_;
 		z=z_;
-		double[][] toMatrix = {
-				{x},
-				{y},
-				{z}
-		};
-		double[][] result = matrixMult(conversionMatrix,toMatrix);
-		twoDx=result[0][0];
-		twoDy=result[1][0];
 	}
 	
 	public void updatePoint(double angle) {
