@@ -1,21 +1,56 @@
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.awt.*;
 public class Point {
 	public double x;
 	public double y;
 	public double z;
 	
+	public int size;
+	public Object color;
+	
+	public HashMap<String, Object[]> elementDict = new HashMap<>();
+	
 	public double twoDx;
 	public double twoDy;
+	
+	public ArrayList<Point> singleBondedAtoms = new ArrayList<>();
+	public ArrayList<Point> doubleBondedAtoms = new ArrayList<>();
 	
 	public static double[][] conversionMatrix =  {
 			{1,0,0},
 			{0,1,0}
 		};
 	
-	public Point(double x_, double y_, double z_) {
+	public Point(double x_, double y_, double z_, String formula) {
+		
+		elementDict.put("O", new Object[] {30, Color.RED});
+		elementDict.put("C", new Object[] {25, Color.BLACK});
+		elementDict.put("N", new Object[] {27, Color.GREEN});
+		elementDict.put("S", new Object[] {20, Color.YELLOW});
+		
 		x=x_;
 		y=y_;
 		z=z_;
+		size=(int) elementDict.get(formula)[0];
+		color=elementDict.get(formula)[1];
+		
+	}
+	
+	public ArrayList<Point> getDoubleBondedAtoms() {
+		return doubleBondedAtoms;
+	}
+	
+	public ArrayList<Point> getSingleBondedAtoms() {
+		return singleBondedAtoms;
+	}
+	
+	public void addSingleBond(Point p) {
+		singleBondedAtoms.add(p);
+	}
+	
+	public void addDoubleBond(Point p) {
+		doubleBondedAtoms.add(p);
 	}
 	
 	public void updatePoint(double angle) {
@@ -33,13 +68,13 @@ public class Point {
 				{0,Math.sin(angle),Math.cos(angle)}
 		};
 		double[][] rotationMatrixY = {
-				{Math.cos(angle),0,Math.sin(angle)},
+				{Math.cos(45),0,Math.sin(45)},
 				{0,1,0},
-				{-Math.sin(angle),0,Math.cos(angle)}
+				{-Math.sin(45),0,Math.cos(45)}
 		};
 		double[][] rotationMatrixZ = {
-				{Math.cos(angle),-Math.sin(angle),0},
-				{Math.sin(angle), Math.cos(angle), 0},
+				{Math.cos(45),-Math.sin(45),0},
+				{Math.sin(45), Math.cos(45), 0},
 				{0,0,1}
 		};
 		double[][] rotate = matrixMult(rotationMatrixY,toMatrix);
