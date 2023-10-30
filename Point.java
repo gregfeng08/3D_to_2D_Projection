@@ -4,13 +4,11 @@ public class Point {
 	public double y;
 	public double z;
 	
+	public double depth;
+	public double dist = 0;
+	
 	public double twoDx;
 	public double twoDy;
-	
-	public static double[][] conversionMatrix =  {
-			{1,0,0},
-			{0,1,0}
-		};
 	
 	public Point(double x_, double y_, double z_) {
 		x=x_;
@@ -45,6 +43,12 @@ public class Point {
 		double[][] rotate = matrixMult(rotationMatrixY,toMatrix);
 		rotate = matrixMult(rotationMatrixX,rotate);
 		rotate = matrixMult(rotationMatrixZ,rotate);
+		
+		double z = 1/(0.3); //Scale
+		double[][] conversionMatrix =  {
+						{z,0,0},
+						{0,z,0}
+		};
 		double[][] result = matrixMult(conversionMatrix,rotate);
 		//double[][] result = matrixMult(conversionMatrix,toMatrix);
 		twoDx=result[0][0];
@@ -72,7 +76,7 @@ public class Point {
 			System.out.println();
 		}*/
 	
-	public static double[][] matrixMult(double[][] m1, double[][] m2) {
+	public static double[][] matrixMult(double[][] m1, double[][] m2) { //FIX THIS, Matrix multiplies wrong dimensions correctly
 		double[][] result;
 		if(m1[0].length!=m2.length) {
 			System.out.println("ERR: Invalid Matrix Dimensions");
@@ -91,6 +95,16 @@ public class Point {
 					//System.out.println(sum);
 					result[j][k]=sum;
 				}
+			}
+		}
+		return result;
+	}
+	public static double[][] matrixTransp(double[][] matrix) { //Matrix transpose
+		double[][] result;
+		result = new double[matrix[0].length][matrix.length];
+		for(int i=0;i<matrix[0].length;i++) {
+			for(int j=0;j<matrix.length;j++) {
+				result[i][j]=matrix[j][i];
 			}
 		}
 		return result;
