@@ -1,6 +1,10 @@
 /* AUTHOR: Gregory Feng
  * DATE: 8/27/23
  * DESCRIPTION: Creates a 3-dimensional cube visualization using matrix operations
+ * TODO:
+ * 	-Add custom point input
+ * 	-Add equation parsing
+ * 	-Pray to god everything works
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
