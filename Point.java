@@ -40,11 +40,18 @@ public class Point {
 				{Math.sin(angle), Math.cos(angle), 0},
 				{0,0,1}
 		};
-		double[][] rotate = matrixMult(rotationMatrixY,toMatrix);
-		rotate = matrixMult(rotationMatrixX,rotate);
-		rotate = matrixMult(rotationMatrixZ,rotate);
+		double[][] rotate = toMatrix;
+		if(Main.rotateY) {
+			rotate = matrixMult(rotationMatrixY,rotate);
+		}
+		if(Main.rotateX) {
+			rotate = matrixMult(rotationMatrixX,rotate);
+		}
+		if(Main.rotateZ) {
+			rotate = matrixMult(rotationMatrixZ,rotate);
+		}
 		
-		double z = 1/(0.3); //Scale
+		double z = 1*Main.scale; //Scale
 		double[][] conversionMatrix =  {
 						{z,0,0},
 						{0,z,0}

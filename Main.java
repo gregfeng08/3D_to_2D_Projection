@@ -3,8 +3,14 @@
  * DESCRIPTION: Creates a 3-dimensional cube visualization using matrix operations
  */
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Main extends JFrame {
 	
@@ -12,6 +18,8 @@ public class Main extends JFrame {
 	public static boolean rotateX = false, rotateY = false, rotateZ = false;
 	//public static Point[] points = new Point[8];
 	public static ArrayList<Point> points = new ArrayList<Point>();
+	public static int scale = 1;
+	public static String customStringMatrix[][] = new String[3][3];
 	
 	public Main() {
 		//I don't even know what the shape is for this
@@ -44,41 +52,115 @@ public class Main extends JFrame {
 		PaintPanel paintPan = new PaintPanel();
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, this.EXIT_ON_CLOSE));
-		panel.setPreferredSize(new Dimension(200,20));
+		panel.setPreferredSize(new Dimension(300,20));
 		
 		//Add a label for scale slider
-		JLabel label = new JLabel("Scale");
+		JLabel label = new JLabel("Scale:");
 		label.setPreferredSize(new Dimension(50,10));
 		
 		//Add a slider for scale of the projection
-		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 0,4,2);
+		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 1,4,1);
 		scaleSlider.setMajorTickSpacing(1);
 		scaleSlider.setMinorTickSpacing(1);
 		scaleSlider.setPaintTicks(true);
 		scaleSlider.setPaintLabels(true);
-		scaleSlider.setPreferredSize(new Dimension(100,20));
+		scaleSlider.setMaximumSize(new Dimension(400,40));
+		scaleSlider.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(!scaleSlider.getValueIsAdjusting()) {
+					scale = scaleSlider.getValue();
+				}
+			}
+			
+		});
+		
+		//Add a label for scale slider
+		JLabel matrixLabel = new JLabel("Multiply By A Custom Matrix:");
+		matrixLabel.setPreferredSize(new Dimension(50,10));
+		
+		JPanel matrixPanel = new JPanel();
+		matrixPanel.setLayout(new GridLayout(3,3));
+		matrixPanel.setMaximumSize(new Dimension(450,60));
+		
+		JTextField customMatrix[][] = new JTextField[3][3];
+		for(int i=0;i<customMatrix.length;i++) {
+			for(int j=0;j<customMatrix.length;j++) {
+				customMatrix[i][j] = new JTextField();
+				customMatrix[i][j].setMaximumSize(new Dimension(150,20));
+				matrixPanel.add(customMatrix[i][j],i,j);
+			}
+		}
+		
+		JButton multiplyButton = new JButton("Multiply!");
+		multiplyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals(("Multiply!"))) {
+					for(int i=0;i<customMatrix.length;i++) {
+						for(int j=0;j<customMatrix[0].length;j++) {
+							customStringMatrix[i][j]=customMatrix[i][j].getText();
+						}
+					}
+					String temp[] = customStringMatrix[0]; //Not sure why rows are swapped
+					customStringMatrix[0]=customStringMatrix[2];
+					customStringMatrix[2]=temp;
+				}
+			}
+		});
 		
 		//Adding a checkbox for X rotation that are used
 		JCheckBox rotationXCheck = new JCheckBox("X-Rotation");
 		rotationXCheck.setPreferredSize(new Dimension(50,25));
+		rotationXCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().compareTo("X-Rotation")==0) {
+					rotateX=!rotateX;
+				}
+			}
+		});
 		
 		//Adding a checkbox for Y rotation that are used
 		JCheckBox rotationYCheck = new JCheckBox("Y-Rotation");
-		rotationXCheck.setPreferredSize(new Dimension(50,25));
+		rotationYCheck.setPreferredSize(new Dimension(50,25));
+		rotationYCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().compareTo("Y-Rotation")==0) {
+					rotateY=!rotateY;
+				}
+			}
+		});
 		
 		//Adding a checkbox for Z rotation that are used
-		JCheckBox rotationZCheck = new JCheckBox("Y-Rotation");
+		JCheckBox rotationZCheck = new JCheckBox("Z-Rotation");
 		rotationZCheck.setPreferredSize(new Dimension(50,25));
+		rotationZCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().compareTo("Z-Rotation")==0) {
+					rotateZ=!rotateZ;
+				}
+			}
+		});
 		
 		panel.add(Box.createRigidArea(new Dimension(10,50)));
 		panel.add(label);
 		panel.add(scaleSlider);
-		panel.add(Box.createRigidArea(new Dimension(10,20)));
+		panel.add(Box.createRigidArea(new Dimension(10,50)));
+		panel.add(matrixLabel);
+		panel.add(matrixPanel);
+		panel.add(multiplyButton);
+		panel.add(Box.createRigidArea(new Dimension(10,50)));
 		panel.add(rotationXCheck);
 		panel.add(Box.createRigidArea(new Dimension(10,20)));
 		panel.add(rotationYCheck);
 		panel.add(Box.createRigidArea(new Dimension(10,20)));
 		panel.add(rotationZCheck);
+		panel.add(Box.createRigidArea(new Dimension(10,20)));
+		
 		
 		
 		add(panel, BorderLayout.LINE_END);
@@ -128,5 +210,3 @@ class PaintPanel extends JPanel {
 		repaint();
 	}	
 }
-
-class ActionListener
