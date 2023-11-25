@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import org.mariuszgromada.math.mxparser.*;
 
 public class Point {
 	public double x;
@@ -41,6 +43,17 @@ public class Point {
 				{0,0,1}
 		};
 		double[][] rotate = toMatrix;
+		for(String[][] m:Main.toBeMultiplied) {
+			double[][] toDouble = new double[3][3];
+			for(int i=0;i<m.length;i++) {
+				for(int j=0;j<m[0].length;j++) {
+					Argument t = new Argument("t",angle);
+					Expression e = new Expression(m[i][j],t);
+					toDouble[i][j]=e.calculate();
+				}
+			}
+			rotate = matrixMult(toDouble,rotate);
+		}
 		if(Main.rotateY) {
 			rotate = matrixMult(rotationMatrixY,rotate);
 		}
@@ -106,6 +119,7 @@ public class Point {
 		}
 		return result;
 	}
+	
 	public static double[][] matrixTransp(double[][] matrix) { //Matrix transpose
 		double[][] result;
 		result = new double[matrix[0].length][matrix.length];

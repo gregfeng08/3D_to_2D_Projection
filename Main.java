@@ -16,6 +16,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.mariuszgromada.math.mxparser.License;
+
 public class Main extends JFrame {
 	
 	public static double resx = 1920, resy = 1080, rotationDelay = 1;
@@ -23,20 +25,12 @@ public class Main extends JFrame {
 	//public static Point[] points = new Point[8];
 	public static ArrayList<Point> points = new ArrayList<Point>();
 	public static int scale = 1;
-	public static String customStringMatrix[][] = new String[3][3];
+	public static ArrayList<String[][]> toBeMultiplied = new ArrayList<String[][]>();
+	public static String newPoint = "";
 	
 	public Main() {
-		//I don't even know what the shape is for this
-		/*for(double i=-100;i<100;i+=0.5) {
-			for(double j=-100;j<100;j+=0.5) {
-				for(double k=-100;k<100;k+=0.5) {
-					if((i*i+j*j+k*k)==100*100) {
-						points.add(new Point(i, j, k));
-					}
-				}
-			}
-		}*/
 		
+		License.iConfirmNonCommercialUse("Gregory Feng");
 		
 		//Points to make a cube
 		points.add(new Point(100,100,100));
@@ -80,6 +74,35 @@ public class Main extends JFrame {
 			
 		});
 		
+		JLabel addPointLabel = new JLabel("Add a point (x,y,z):");
+		addPointLabel.setPreferredSize(new Dimension(50,10));
+		
+		JTextField addPoint = new JTextField();
+		addPoint.setMaximumSize(new Dimension(150,20));
+		addPoint.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			//	if(e.getActionCommand().equals(())
+			}
+		});
+		
+		JButton addPointButton = new JButton("Add!");
+		addPointButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals(("Add!"))) {
+					String pointCoords[] = parsePoint(addPoint.getText());
+					points.add(new Point(Double.parseDouble(pointCoords[0]),Double.parseDouble(pointCoords[1]),Double.parseDouble(pointCoords[2])));
+					addPoint.setText("");
+				}
+			}
+			
+			private String[] parsePoint(String s) {
+				return s.substring(1,s.length()-1).split(",");
+			}
+		});
+		
 		//Add a label for scale slider
 		JLabel matrixLabel = new JLabel("Multiply By A Custom Matrix:");
 		matrixLabel.setPreferredSize(new Dimension(50,10));
@@ -102,6 +125,7 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getActionCommand().equals(("Multiply!"))) {
+					String customStringMatrix[][] = new String[3][3];
 					for(int i=0;i<customMatrix.length;i++) {
 						for(int j=0;j<customMatrix[0].length;j++) {
 							customStringMatrix[i][j]=customMatrix[i][j].getText();
@@ -110,8 +134,21 @@ public class Main extends JFrame {
 					String temp[] = customStringMatrix[0]; //Not sure why rows are swapped
 					customStringMatrix[0]=customStringMatrix[2];
 					customStringMatrix[2]=temp;
+					toBeMultiplied.add(customStringMatrix);
 				}
 			}
+		});
+		
+		JButton resetPoints = new JButton("Clear Points!");
+		resetPoints.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals(("Clear Points!"))) {
+					points.clear();
+				}
+				
+			}
+			
 		});
 		
 		//Adding a checkbox for X rotation that are used
@@ -153,6 +190,11 @@ public class Main extends JFrame {
 		panel.add(Box.createRigidArea(new Dimension(10,50)));
 		panel.add(label);
 		panel.add(scaleSlider);
+		panel.add(Box.createRigidArea(new Dimension(10,50)));
+		panel.add(addPointLabel);
+		panel.add(addPoint);
+		panel.add(addPointButton);
+		panel.add(resetPoints);
 		panel.add(Box.createRigidArea(new Dimension(10,50)));
 		panel.add(matrixLabel);
 		panel.add(matrixPanel);
