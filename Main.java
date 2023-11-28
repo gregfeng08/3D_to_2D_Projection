@@ -129,6 +129,7 @@ public class Main extends JFrame {
 					for(int i=0;i<customMatrix.length;i++) {
 						for(int j=0;j<customMatrix[0].length;j++) {
 							customStringMatrix[i][j]=customMatrix[i][j].getText();
+							customMatrix[i][j].setText("");
 						}
 					}
 					String temp[] = customStringMatrix[0]; //Not sure why rows are swapped
@@ -137,6 +138,18 @@ public class Main extends JFrame {
 					toBeMultiplied.add(customStringMatrix);
 				}
 			}
+		});
+		
+		JButton resetMatrices = new JButton("Clear Matrices!");
+		resetMatrices.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals(("Clear Matrices!"))) {
+					toBeMultiplied.clear();
+				}
+				
+			}
+			
 		});
 		
 		JButton resetPoints = new JButton("Clear Points!");
@@ -199,6 +212,7 @@ public class Main extends JFrame {
 		panel.add(matrixLabel);
 		panel.add(matrixPanel);
 		panel.add(multiplyButton);
+		panel.add(resetMatrices);
 		panel.add(Box.createRigidArea(new Dimension(10,50)));
 		panel.add(rotationXCheck);
 		panel.add(Box.createRigidArea(new Dimension(10,20)));

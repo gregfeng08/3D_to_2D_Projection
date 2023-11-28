@@ -6,7 +6,6 @@ public class Point {
 	public double y;
 	public double z;
 	
-	public double depth;
 	public double dist = 0;
 	
 	public double twoDx;
@@ -43,17 +42,22 @@ public class Point {
 				{0,0,1}
 		};
 		double[][] rotate = toMatrix;
-		for(String[][] m:Main.toBeMultiplied) {
-			double[][] toDouble = new double[3][3];
-			for(int i=0;i<m.length;i++) {
-				for(int j=0;j<m[0].length;j++) {
-					Argument t = new Argument("t",angle);
-					Expression e = new Expression(m[i][j],t);
-					toDouble[i][j]=e.calculate();
-				}
-			}
-			rotate = matrixMult(toDouble,rotate);
+		// Create a copy of toBeMultiplied
+		ArrayList<String[][]> toBeMultipliedCopy = new ArrayList<>(Main.toBeMultiplied);
+
+		// Iterate through the copied list
+		for (String[][] m : toBeMultipliedCopy) {
+		    double[][] toDouble = new double[3][3];
+		    for (int i = 0; i < m.length; i++) {
+		        for (int j = 0; j < m[0].length; j++) {
+		            Argument t = new Argument("t", angle * 5);
+		            Expression e = new Expression(m[i][j], t);
+		            toDouble[i][j] = e.calculate();
+		        }
+		    }
+		    rotate = matrixMult(toDouble, rotate);
 		}
+
 		if(Main.rotateY) {
 			rotate = matrixMult(rotationMatrixY,rotate);
 		}
