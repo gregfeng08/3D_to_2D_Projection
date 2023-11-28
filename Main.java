@@ -24,7 +24,7 @@ public class Main extends JFrame {
 	public static boolean rotateX = false, rotateY = false, rotateZ = false;
 	//public static Point[] points = new Point[8];
 	public static ArrayList<Point> points = new ArrayList<Point>();
-	public static int scale = 1;
+	public static double scale = 1;
 	public static ArrayList<String[][]> toBeMultiplied = new ArrayList<String[][]>();
 	public static String newPoint = "";
 	
@@ -41,6 +41,7 @@ public class Main extends JFrame {
   		points.add(new Point(100,-100,-100));
   		points.add(new Point(-100,100,-100));
   		points.add(new Point(-100,-100,-100));
+		
   		
   		//Projection Setup
 		setTitle("3D Projection");
@@ -56,19 +57,30 @@ public class Main extends JFrame {
 		JLabel label = new JLabel("Scale:");
 		label.setPreferredSize(new Dimension(50,10));
 		
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+		labelTable.put(0, new JLabel("0.0"));
+		labelTable.put(5, new JLabel("0.5"));
+		labelTable.put(10, new JLabel("1.0"));
+		labelTable.put(15, new JLabel("1.5"));
+		labelTable.put(20, new JLabel("2.0"));
+		
 		//Add a slider for scale of the projection
-		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 1,4,1);
+		JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 0,20,10);
+		scaleSlider.setLabelTable(labelTable);
 		scaleSlider.setMajorTickSpacing(1);
 		scaleSlider.setMinorTickSpacing(1);
 		scaleSlider.setPaintTicks(true);
 		scaleSlider.setPaintLabels(true);
 		scaleSlider.setMaximumSize(new Dimension(400,40));
 		scaleSlider.addChangeListener(new ChangeListener() {
-
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if(!scaleSlider.getValueIsAdjusting()) {
-					scale = scaleSlider.getValue();
+					if(scaleSlider.getValue()!=0) {
+						scale = scaleSlider.getValue()/(double)10;
+					} else {
+						scale = 0.001; //Avoid divide by 0
+					}
 				}
 			}
 			
